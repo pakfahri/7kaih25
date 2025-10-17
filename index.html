@@ -347,6 +347,10 @@
                 gap: 15px;
                 text-align: center;
             }
+            
+            .filter-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         .logout-btn {
@@ -376,6 +380,10 @@
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .form-control[type="date"] {
+            padding: 12px 15px;
         }
     </style>
 </head>
@@ -542,6 +550,55 @@
                         </div>
                     </div>
 
+                    <!-- FILTER TANGGAL DAN AKTIVITAS UNTUK ADMIN -->
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="margin-bottom: 15px; color: var(--dark);">
+                            <i class="fas fa-filter"></i> Filter Lanjutan
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;" class="filter-grid">
+                            <!-- Filter Tanggal Mulai -->
+                            <div>
+                                <label class="form-label">Tanggal Mulai</label>
+                                <input type="date" id="startDateFilter" class="form-control" onchange="applyFilters()">
+                            </div>
+                            
+                            <!-- Filter Tanggal Akhir -->
+                            <div>
+                                <label class="form-label">Tanggal Akhir</label>
+                                <input type="date" id="endDateFilter" class="form-control" onchange="applyFilters()">
+                            </div>
+                            
+                            <!-- Filter Aktivitas -->
+                            <div>
+                                <label class="form-label">Filter Aktivitas</label>
+                                <select id="activityFilter" class="form-control" onchange="applyFilters()">
+                                    <option value="all">Semua Aktivitas</option>
+                                    <option value="completed">Hanya yang Selesai</option>
+                                    <option value="not-completed">Hanya yang Belum Selesai</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filter Jenis Aktivitas Spesifik -->
+                            <div>
+                                <label class="form-label">Jenis Aktivitas</label>
+                                <select id="specificActivityFilter" class="form-control" onchange="applyFilters()">
+                                    <option value="all">Semua Jenis</option>
+                                    <!-- Activities will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <button onclick="clearAllFilters()" class="btn btn-secondary" style="width: auto;">
+                                <i class="fas fa-broom"></i> Clear Semua Filter
+                            </button>
+                            <small style="color: var(--gray);" id="filterStatus">
+                                Menampilkan semua data
+                            </small>
+                        </div>
+                    </div>
+
                     <h3 style="margin-bottom: 20px; color: var(--dark);">
                         <i class="fas fa-history"></i> Riwayat Jurnal Terbaru
                     </h3>
@@ -599,6 +656,12 @@
         let unsubscribeStudentJournals = null;
         let allStudents = new Set();
         let selectedStudent = 'all';
+        
+        // Global variables untuk filter
+        let startDateFilter = null;
+        let endDateFilter = null;
+        let activityFilter = 'all';
+        let specificActivityFilter = 'all';
 
         // ACTIVITIES YANG DIPERBARUI
         const activities = [
@@ -665,6 +728,7 @@
         function initApp() {
             displayActivities();
             updateDate();
+            populateActivityFilter();
         }
 
         // Display activities for student
@@ -684,6 +748,19 @@
                     <input type="checkbox" class="activity-checkbox" id="${activity.id}">
                 </div>
             `).join('');
+        }
+        
+        // Populate activity filter dropdown
+        function populateActivityFilter() {
+            const specificActivityFilter = document.getElementById('specificActivityFilter');
+            specificActivityFilter.innerHTML = '<option value="all">Semua Jenis</option>';
+            
+            activities.forEach(activity => {
+                const option = document.createElement('option');
+                option.value = activity.id;
+                option.textContent = activity.title;
+                specificActivityFilter.appendChild(option);
+            });
         }
 
         // Toggle activity selection
@@ -888,6 +965,20 @@
                     unsubscribeJournals();
                 }
 
+                // Set default tanggal untuk filter (30 hari terakhir)
+                if (!startDateFilter) {
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    document.getElementById('startDateFilter').value = thirtyDaysAgo.toISOString().split('T')[0];
+                    startDateFilter = document.getElementById('startDateFilter').value;
+                }
+                
+                if (!endDateFilter) {
+                    const today = new Date();
+                    document.getElementById('endDateFilter').value = today.toISOString().split('T')[0];
+                    endDateFilter = document.getElementById('endDateFilter').value;
+                }
+
                 const journalsQuery = query(
                     collection(db, 'journals'), 
                     orderBy('createdAt', 'desc')
@@ -896,7 +987,6 @@
                 unsubscribeJournals = onSnapshot(journalsQuery, (querySnapshot) => {
                     console.log('📊 Real-time update received!', querySnapshot.size, 'journals');
                     updateAdminUI(querySnapshot);
-                    showNotification('Data diperbarui secara real-time!');
                 }, (error) => {
                     console.error('Real-time error:', error);
                 });
@@ -937,21 +1027,41 @@
                 ...doc.data() 
             }));
             
-            // PERBAIKAN: Filter yang lebih simple
-            let filteredJournals = journals;
-            
-            if (selectedStudent !== 'all') {
-                filteredJournals = journals.filter(journal => {
-                    // HANYA filter by studentId saja
-                    return journal.studentId === selectedStudent;
-                });
+            // FILTER DATA BERDASARKAN SEMUA KRITERIA
+            let filteredJournals = journals.filter(journal => {
+                // Filter berdasarkan siswa
+                if (selectedStudent !== 'all' && journal.studentId !== selectedStudent) {
+                    return false;
+                }
                 
-                console.log('🔍 Filter Results:', {
-                    selectedStudent: selectedStudent,
-                    totalJournals: journals.length,
-                    filteredCount: filteredJournals.length
-                });
-            }
+                // Filter berdasarkan tanggal
+                if (startDateFilter && journal.date < startDateFilter) {
+                    return false;
+                }
+                if (endDateFilter && journal.date > endDateFilter) {
+                    return false;
+                }
+                
+                // Filter berdasarkan status aktivitas (completed/not-completed)
+                if (activityFilter !== 'all') {
+                    const hasCompletedActivities = Object.values(journal.activities).some(val => val);
+                    if (activityFilter === 'completed' && !hasCompletedActivities) {
+                        return false;
+                    }
+                    if (activityFilter === 'not-completed' && hasCompletedActivities) {
+                        return false;
+                    }
+                }
+                
+                // Filter berdasarkan aktivitas spesifik
+                if (specificActivityFilter !== 'all') {
+                    if (!journal.activities[specificActivityFilter]) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
             
             // Kumpulkan data siswa
             journals.forEach(journal => {
@@ -969,6 +1079,9 @@
             updateStudentFilter();
             displayFilteredJournals(filteredJournals, today);
             updateStats(filteredJournals.length, uniqueStudents.size, todayCount);
+            
+            // Update status filter
+            updateFilterStatus();
         }
 
         // ✅ FUNCTION HITUNG NILAI SISWA
@@ -1078,8 +1191,8 @@
                 journalsList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--gray);">
                         <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                        <p>Tidak ada jurnal untuk siswa yang dipilih</p>
-                        <small>Coba pilih "Semua Siswa" atau siswa lain</small>
+                        <p>Tidak ada jurnal untuk kriteria yang dipilih</p>
+                        <small>Coba ubah filter atau pilih "Semua Siswa"</small>
                     </div>
                 `;
                 
@@ -1242,6 +1355,88 @@
             document.getElementById('nilaiStatCard').style.display = 'none';
             showNotification('Filter direset ke semua siswa');
             loadAdminData();
+        }
+        
+        // FUNCTION APPLY FILTERS
+        window.applyFilters = function() {
+            // Ambil nilai dari input filter
+            startDateFilter = document.getElementById('startDateFilter').value;
+            endDateFilter = document.getElementById('endDateFilter').value;
+            activityFilter = document.getElementById('activityFilter').value;
+            specificActivityFilter = document.getElementById('specificActivityFilter').value;
+            
+            // Validasi tanggal
+            if (startDateFilter && endDateFilter && startDateFilter > endDateFilter) {
+                alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir');
+                document.getElementById('startDateFilter').value = '';
+                document.getElementById('endDateFilter').value = '';
+                startDateFilter = null;
+                endDateFilter = null;
+                return;
+            }
+            
+            // Update status filter
+            updateFilterStatus();
+            
+            // Trigger re-render data
+            if (unsubscribeJournals) {
+                loadAdminData();
+            }
+        }
+
+        // FUNCTION CLEAR ALL FILTERS
+        window.clearAllFilters = function() {
+            // Reset semua filter
+            document.getElementById('startDateFilter').value = '';
+            document.getElementById('endDateFilter').value = '';
+            document.getElementById('activityFilter').value = 'all';
+            document.getElementById('specificActivityFilter').value = 'all';
+            document.getElementById('studentFilter').value = 'all';
+            
+            // Reset variabel global
+            startDateFilter = null;
+            endDateFilter = null;
+            activityFilter = 'all';
+            specificActivityFilter = 'all';
+            selectedStudent = 'all';
+            
+            // Update status
+            document.getElementById('filterStatus').textContent = 'Menampilkan semua data';
+            
+            // Reload data
+            loadAdminData();
+            showNotification('Semua filter telah direset');
+        }
+
+        // FUNCTION UPDATE FILTER STATUS
+        function updateFilterStatus() {
+            const statusElements = [];
+            
+            if (selectedStudent !== 'all') {
+                statusElements.push(`Siswa: ${selectedStudent}`);
+            }
+            
+            if (startDateFilter || endDateFilter) {
+                const start = startDateFilter ? new Date(startDateFilter).toLocaleDateString('id-ID') : 'Awal';
+                const end = endDateFilter ? new Date(endDateFilter).toLocaleDateString('id-ID') : 'Sekarang';
+                statusElements.push(`Tanggal: ${start} - ${end}`);
+            }
+            
+            if (activityFilter !== 'all') {
+                const activityText = activityFilter === 'completed' ? 'Selesai' : 'Belum Selesai';
+                statusElements.push(`Status: ${activityText}`);
+            }
+            
+            if (specificActivityFilter !== 'all') {
+                const activity = activities.find(a => a.id === specificActivityFilter);
+                statusElements.push(`Aktivitas: ${activity?.title || specificActivityFilter}`);
+            }
+            
+            const statusText = statusElements.length > 0 
+                ? `Filter aktif: ${statusElements.join(' • ')}`
+                : 'Menampilkan semua data';
+            
+            document.getElementById('filterStatus').textContent = statusText;
         }
 
         // Real-time Student History
@@ -1422,8 +1617,5 @@
         // Initialize app
         initApp();
     </script>
-
-
-    
 </body>
 </html>
