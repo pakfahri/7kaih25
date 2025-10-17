@@ -1059,7 +1059,7 @@
             
             // Cek batasan jurnal per hari
             const todayJournals = await checkTodayJournals(currentUser.uid, today);
-            if (todayJournals >= 1) {
+            if (todayJournals >= 2) {
                 alert('❌ Maaf, kamu hanya boleh mengirim maksimal 1 jurnal per hari.');
                 return;
             }
