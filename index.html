@@ -150,11 +150,6 @@
             background: var(--success);
         }
 
-        .btn-warning {
-            background: var(--warning);
-            color: var(--dark);
-        }
-
         /* Dashboard Styles */
         .dashboard-header {
             display: flex;
@@ -291,7 +286,6 @@
             margin-bottom: 15px;
             border-left: 4px solid var(--success);
             box-shadow: var(--shadow);
-            position: relative;
         }
 
         .journal-header {
@@ -383,99 +377,6 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-
-        /* Filter Section */
-        .filter-section {
-            background: var(--light);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-actions .btn {
-            width: auto;
-        }
-
-        /* Edit Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--gray);
-            width: auto;
-            padding: 5px;
-        }
-
-        .close-btn:hover {
-            color: var(--danger);
-            background: none;
-            transform: none;
-        }
-
-        .edit-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .edit-actions .btn {
-            width: auto;
-            flex: 1;
-        }
     </style>
 </head>
 <body>
@@ -488,7 +389,7 @@
                 </div>
                 <h1>Jurnal Harian Digital</h1>
                 <p>Track Pembiasaan harian siswa</p>
-                <div style="margin-top: 15px;">
+                    <div style="margin-top: 15px;">
                     <a href="https://pakfahri.github.io/profil/" target="_blank" style="color: white; text-decoration: none;">
                         <i class="fas fa-user"></i> Pengembang
                     </a>
@@ -516,10 +417,10 @@
                     <h1><i class="fas fa-user-graduate"></i> Dashboard Siswa</h1>
                     <p>Isi jurnal Kebiasaan harian Anda</p>
                     <div style="margin-top: 15px;">
-                        <a href="https://pakfahri.github.io/profil/" target="_blank" style="color: white; text-decoration: none;">
-                            <i class="fas fa-user"></i> Pengembang
-                        </a>
-                    </div>
+                    <a href="https://pakfahri.github.io/profil/" target="_blank" style="color: white; text-decoration: none;">
+                        <i class="fas fa-user"></i> Pengembang
+                    </a>
+                </div>
                 </div>
                 <div class="card-body">
                     <div class="dashboard-header">
@@ -625,52 +526,18 @@
                         </div>
                     </div>
 
-                    <!-- FILTER SECTION -->
-                    <div class="filter-section">
+                    <!-- FILTER SISWA UNTUK ADMIN -->
+                    <div style="margin-bottom: 25px;">
                         <h3 style="margin-bottom: 15px; color: var(--dark);">
-                            <i class="fas fa-filter"></i> Filter Data Jurnal
+                            <i class="fas fa-filter"></i> Filter Berdasarkan Siswa
                         </h3>
-                        
-                        <div class="filter-grid">
-                            <!-- Filter Siswa -->
-                            <div class="form-group">
-                                <label class="form-label">Filter Berdasarkan Siswa</label>
-                                <select id="studentFilter" class="form-control" onchange="filterByStudent()">
-                                    <option value="all">Semua Siswa</option>
-                                    <!-- Student options will be populated by JavaScript -->
-                                </select>
-                            </div>
-
-                            <!-- Filter Tanggal -->
-                            <div class="form-group">
-                                <label class="form-label">Filter Berdasarkan Tanggal</label>
-                                <input type="date" id="dateFilter" class="form-control" onchange="filterByDate()">
-                            </div>
-
-                            <!-- Filter Aktivitas -->
-                            <div class="form-group">
-                                <label class="form-label">Filter Berdasarkan Aktivitas</label>
-                                <select id="activityFilter" class="form-control" onchange="filterByActivity()">
-                                    <option value="all">Semua Aktivitas</option>
-                                    <option value="bangunPagi">Bangun Pagi</option>
-                                    <option value="sholatShubuh">Sholat Shubuh</option>
-                                    <option value="sholatDzuhur">Sholat Dzuhur/Jumat</option>
-                                    <option value="sholatAshar">Sholat Ashar</option>
-                                    <option value="sholatMaghrib">Sholat Maghrib</option>
-                                    <option value="sholatIsya">Sholat Isya</option>
-                                    <option value="sholatSunnah">Sholat Sunnah</option>
-                                    <option value="bacaQuran">Membaca Al-Quran</option>
-                                    <option value="tidurCepat">Tidur Cepat</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="filter-actions">
-                            <button onclick="applyAllFilters()" class="btn">
-                                <i class="fas fa-filter"></i> Terapkan Semua Filter
-                            </button>
-                            <button onclick="clearAllFilters()" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Hapus Semua Filter
+                        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <select id="studentFilter" class="form-control" style="width: auto; min-width: 200px;" onchange="filterByStudent()">
+                                <option value="all">Semua Siswa</option>
+                                <!-- Student options will be populated by JavaScript -->
+                            </select>
+                            <button onclick="clearFilter()" class="btn btn-secondary" style="width: auto;">
+                                <i class="fas fa-times"></i> Clear Filter
                             </button>
                         </div>
                     </div>
@@ -683,24 +550,6 @@
                         <!-- Journals will be populated by JavaScript -->
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">
-                    <i class="fas fa-edit"></i> Edit Jurnal Siswa
-                </h3>
-                <button class="close-btn" onclick="closeEditModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="editModalContent">
-                <!-- Edit form will be populated here -->
             </div>
         </div>
     </div>
@@ -726,8 +575,7 @@
             Timestamp,
             onSnapshot,
             orderBy,
-            deleteDoc,
-            updateDoc
+            deleteDoc
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // Your web app's Firebase configuration
@@ -751,9 +599,6 @@
         let unsubscribeStudentJournals = null;
         let allStudents = new Set();
         let selectedStudent = 'all';
-        let selectedDate = '';
-        let selectedActivity = 'all';
-        let allJournals = [];
 
         // ACTIVITIES YANG DIPERBARUI
         const activities = [
@@ -770,40 +615,43 @@
                 description: 'Sholat shubuh berjamaah'
             },
             {
-                id: 'sholatDzuhur',
+                id: 'sholatDzuhurAshar',
                 icon: 'fas fa-mosque',
-                title: 'Sholat Dzuhur/Jumat',
-                description: 'Sholat dzuhur atau jumat'
+                title: 'Sholat Dzuhur & Ashar',
+                description: 'Sholat dzuhur/jumat & sholat ashar'
             },
+
             {
-                id: 'sholatAshar',
-                icon: 'fas fa-praying-hands',
-                title: 'Sholat Ashar',
-                description: 'Sholat ashar tepat waktu'
-            },
-            {
-                id: 'sholatMaghrib',
+                id: 'sholatMaghribIsya',
                 icon: 'fas fa-star-and-crescent',
-                title: 'Sholat Maghrib',
-                description: 'Sholat maghrib berjamaah'
+                title: 'Sholat Maghrib & Isya',
+                description: 'Sholat maghrib & Isya berjamaah'
+            },
+            
+            {
+                id: 'olahraga',
+                icon: 'fas fa-running',
+                title: 'Olahraga',
+                description: 'Workout / Running / Senam'
+            },
+
+            {
+                id: 'belajar',
+                icon: 'fas fa-book-open',
+                title: 'Belajar',
+                description: 'Minimal membaca buku 1 halaman'
             },
             {
-                id: 'sholatIsya',
-                icon: 'fas fa-moon',
-                title: 'Sholat Isya',
-                description: 'Sholat isya berjamaah'
+                id: 'makansehat',
+                icon: 'fas fa-plate-wheat',
+                title: 'Makan Sehat Bergizi',
+                description: 'Sayur & telur/tahu / tempe/ikan/ayam'
             },
             {
-                id: 'sholatSunnah',
-                icon: 'fas fa-hands-praying',
-                title: 'Sholat Sunnah',
-                description: 'Sholat sunnah rawatib/dhuha'
-            },
-            {
-                id: 'bacaQuran',
-                icon: 'fas fa-book-quran',
-                title: 'Membaca Al-Quran',
-                description: 'Baca minimal 1 halaman'
+                id: 'bermasyarakat',
+                icon: 'fas fa-users',
+                title: 'Bermasyarakat',
+                description: 'Bersosialiasi dengan lingkungan sekitar rumah'
             },
             {
                 id: 'tidurCepat',
@@ -1047,10 +895,6 @@
                 
                 unsubscribeJournals = onSnapshot(journalsQuery, (querySnapshot) => {
                     console.log('📊 Real-time update received!', querySnapshot.size, 'journals');
-                    allJournals = querySnapshot.docs.map(doc => ({ 
-                        id: doc.id, 
-                        ...doc.data() 
-                    }));
                     updateAdminUI(querySnapshot);
                     showNotification('Data diperbarui secara real-time!');
                 }, (error) => {
@@ -1068,308 +912,456 @@
             const today = new Date().toISOString().split('T')[0];
             
             let todayCount = 0;
-            let totalJournals = 0;
-            const students = new Set();
+            const uniqueStudents = new Set();
+            allStudents.clear();
             
-            // Filter journals based on current filters
-            let filteredJournals = allJournals;
+            journalsList.innerHTML = '';
+            
+            if (querySnapshot.empty) {
+                journalsList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--gray);">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Belum ada jurnal yang disimpan</p>
+                        <small style="color: var(--primary);">📡 Mode real-time aktif - menunggu data...</small>
+                    </div>
+                `;
+                
+                updateStats(0, 0, 0);
+                // ✅ SEMBUNYIKAN NILAI JIKA TIDAK ADA DATA
+                document.getElementById('nilaiStatCard').style.display = 'none';
+                return;
+            }
+            
+            const journals = querySnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+            }));
+            
+            // PERBAIKAN: Filter yang lebih simple
+            let filteredJournals = journals;
             
             if (selectedStudent !== 'all') {
-                filteredJournals = filteredJournals.filter(j => j.studentEmail === selectedStudent);
+                filteredJournals = journals.filter(journal => {
+                    // HANYA filter by studentId saja
+                    return journal.studentId === selectedStudent;
+                });
+                
+                console.log('🔍 Filter Results:', {
+                    selectedStudent: selectedStudent,
+                    totalJournals: journals.length,
+                    filteredCount: filteredJournals.length
+                });
             }
             
-            if (selectedDate) {
-                filteredJournals = filteredJournals.filter(j => j.date === selectedDate);
-            }
-            
-            if (selectedActivity !== 'all') {
-                filteredJournals = filteredJournals.filter(j => j.activities && j.activities[selectedActivity] === true);
-            }
-            
-            // Update stats
-            filteredJournals.forEach(journal => {
-                totalJournals++;
-                students.add(journal.studentEmail);
+            // Kumpulkan data siswa
+            journals.forEach(journal => {
+                if (journal.studentId && journal.studentName) {
+                    uniqueStudents.add(journal.studentId);
+                    allStudents.add({ 
+                        id: journal.studentId, 
+                        name: journal.studentName, 
+                        email: journal.studentEmail 
+                    });
+                }
                 if (journal.date === today) todayCount++;
             });
             
-            document.getElementById('totalJournals').textContent = totalJournals;
-            document.getElementById('activeStudents').textContent = students.size;
-            document.getElementById('todayEntries').textContent = todayCount;
-            
-            // Update student filter dropdown
-            updateStudentFilterDropdown();
-            
-            // Display filtered journals
-            journalsList.innerHTML = filteredJournals.length > 0 ? 
-                filteredJournals.map(journal => {
-                    const completedActivities = journal.activities ? 
-                        Object.keys(journal.activities).filter(key => journal.activities[key]).length : 0;
-                    const totalActivities = activities.length;
-                    
-                    return `
-                        <div class="journal-card">
-                            <div class="journal-header">
-                                <div class="student-name">${journal.studentName}</div>
-                                <div class="journal-date">${formatDate(journal.date)}</div>
-                                <button onclick="editJournal('${journal.id}')" class="btn btn-warning" style="width: auto; padding: 5px 10px;">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                            </div>
-                            <div class="activities-summary">
-                                <div class="activity-badge activity-completed">
-                                    <i class="fas fa-check-circle"></i> ${completedActivities} Aktifitas
-                                </div>
-                                ${journal.doa ? `
-                                    <div class="activity-badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary);">
-                                        <i class="fas fa-praying-hands"></i> Ada Doa
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                }).join('') : 
-                '<p style="text-align: center; color: var(--gray); padding: 20px;">Tidak ada jurnal yang sesuai dengan filter.</p>';
+            updateStudentFilter();
+            displayFilteredJournals(filteredJournals, today);
+            updateStats(filteredJournals.length, uniqueStudents.size, todayCount);
         }
 
-        // Update student filter dropdown
-        function updateStudentFilterDropdown() {
+        // ✅ FUNCTION HITUNG NILAI SISWA
+        function hitungNilaiSiswa(journals) {
+            if (journals.length === 0) return { rataRata: 0, totalPoin: 0, totalHari: 0, detail: {} };
+            
+            let totalPoin = 0;
+            let totalHari = 0;
+            const hariUnik = new Set();
+            const detailHarian = {};
+            
+            journals.forEach(journal => {
+                // Hitung poin per jurnal
+                let poinHarian = 0;
+                
+                // ✅ 1 ceklis = 1 poin
+                const jumlahCeklis = Object.values(journal.activities).filter(val => val).length;
+                poinHarian += jumlahCeklis;
+                
+                // ✅ Mengisi doa = 1 poin
+                if (journal.doa && journal.doa.trim() !== '') {
+                    poinHarian += 1;
+                }
+                
+                // Maksimal poin per hari = jumlah activities + 1 (doa)
+                const maksimalPoin = Object.keys(journal.activities).length + 1;
+                
+                // Simpan detail harian
+                const tanggal = journal.date;
+                if (!detailHarian[tanggal]) {
+                    detailHarian[tanggal] = {
+                        poin: 0,
+                        maksimal: maksimalPoin,
+                        ceklis: 0,
+                        doa: 0
+                    };
+                    hariUnik.add(tanggal);
+                }
+                
+                detailHarian[tanggal].poin += poinHarian;
+                detailHarian[tanggal].ceklis += jumlahCeklis;
+                if (journal.doa && journal.doa.trim() !== '') {
+                    detailHarian[tanggal].doa += 1;
+                }
+                
+                totalPoin += poinHarian;
+            });
+            
+            totalHari = hariUnik.size;
+            const rataRata = totalHari > 0 ? (totalPoin / totalHari).toFixed(1) : 0;
+            
+            return {
+                rataRata: parseFloat(rataRata),
+                totalPoin: totalPoin,
+                totalHari: totalHari,
+                detail: detailHarian
+            };
+        }
+
+        // ✅ FUNCTION TAMPILKAN NILAI
+        function tampilkanNilaiSiswa(journals, studentName) {
+            const nilaiStatCard = document.getElementById('nilaiStatCard');
+            const rataRataNilai = document.getElementById('rataRataNilai');
+            const detailNilai = document.getElementById('detailNilai');
+            
+            if (selectedStudent !== 'all' && journals.length > 0) {
+                const nilai = hitungNilaiSiswa(journals);
+                
+                // Tampilkan stat card nilai
+                nilaiStatCard.style.display = 'block';
+                rataRataNilai.textContent = nilai.rataRata;
+                
+                // Tampilkan detail nilai
+                detailNilai.innerHTML = `
+                    ${nilai.totalPoin} poin / ${nilai.totalHari} hari<br>
+                    <small style="color: var(--success);">${studentName}</small>
+                `;
+                
+                // Warna berdasarkan nilai
+                if (nilai.rataRata >= 8) {
+                    rataRataNilai.style.color = 'var(--success)';
+                } else if (nilai.rataRata >= 6) {
+                    rataRataNilai.style.color = 'var(--warning)';
+                } else {
+                    rataRataNilai.style.color = 'var(--danger)';
+                }
+                
+                console.log('📊 Detail Nilai:', {
+                    siswa: studentName,
+                    rataRata: nilai.rataRata,
+                    totalPoin: nilai.totalPoin,
+                    totalHari: nilai.totalHari,
+                    detail: nilai.detail
+                });
+                
+            } else {
+                // Sembunyikan jika tidak ada filter atau tidak ada data
+                nilaiStatCard.style.display = 'none';
+            }
+        }
+
+        // FUNCTION BARU: TAMPILKAN JURNAL YANG FILTERED
+        function displayFilteredJournals(journals, today) {
+            const journalsList = document.getElementById('journalsList');
+            
+            if (journals.length === 0) {
+                journalsList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--gray);">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Tidak ada jurnal untuk siswa yang dipilih</p>
+                        <small>Coba pilih "Semua Siswa" atau siswa lain</small>
+                    </div>
+                `;
+                
+                // ✅ SEMBUNYIKAN NILAI JIKA TIDAK ADA DATA
+                document.getElementById('nilaiStatCard').style.display = 'none';
+                return;
+            }
+            
+            // ✅ TAMPILKAN NILAI JIKA FILTER SISWA DIPILIH
+            if (selectedStudent !== 'all') {
+                const studentName = journals[0]?.studentName || 'Siswa';
+                tampilkanNilaiSiswa(journals, studentName);
+            } else {
+                document.getElementById('nilaiStatCard').style.display = 'none';
+            }
+            
+            journals.forEach(journal => {
+                const completedActivities = Object.values(journal.activities).filter(Boolean).length;
+                const totalActivities = Object.keys(journal.activities).length;
+                
+                // ✅ HITUNG POIN UNTUK TAMPILAN
+                let poinHarian = completedActivities;
+                if (journal.doa && journal.doa.trim() !== '') {
+                    poinHarian += 1;
+                }
+                
+                const journalCard = document.createElement('div');
+                journalCard.className = 'journal-card';
+                journalCard.innerHTML = `
+                    <div class="journal-header">
+                        <div class="student-name">
+                            <i class="fas fa-user-graduate"></i> ${journal.studentName || 'Unknown Student'}
+                            <small style="color: var(--gray); margin-left: 10px;">${journal.studentEmail || 'No email'}</small>
+                        </div>
+                        <div class="journal-date">
+                            <i class="far fa-clock"></i> ${formatDate(journal.date)}
+                            ${journal.date === today ? '<span style="color: var(--success); margin-left: 8px;">• Hari Ini</span>' : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- ✅ INFO POIN HARIAN -->
+                    <div style="background: rgba(67, 97, 238, 0.1); padding: 10px 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 600; color: var(--primary);">
+                                <i class="fas fa-star"></i> Poin Harian
+                            </span>
+                            <span style="font-weight: 700; color: var(--success);">
+                                ${poinHarian} poin
+                            </span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; font-size: 0.8rem;">
+                            <span>✅ Ceklis: ${completedActivities}/${totalActivities}</span>
+                            <span>📝 Doa: ${journal.doa && journal.doa.trim() !== '' ? '1' : '0'}/1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activities-summary">
+                        ${Object.entries(journal.activities).map(([key, value]) => {
+                            const activity = activities.find(a => a.id === key);
+                            return `
+                                <div class="activity-badge ${value ? 'activity-completed' : 'activity-missed'}">
+                                    <i class="fas fa-${value ? 'check' : 'times'}"></i>
+                                    ${activity?.title || key}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${journal.doa ? `
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 8px; border-left: 4px solid var(--primary);">
+                            <strong><i class="fas fa-praying-hands"></i> Doa Hari Esok:</strong>
+                            <p style="margin: 8px 0 0 0; color: var(--dark); font-style: italic;">"${journal.doa}"</p>
+                        </div>
+                    ` : ''}
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                        <small style="color: var(--gray);">
+                            <i class="fas fa-chart-pie"></i> 
+                            ${completedActivities} dari ${totalActivities} kegiatan completed
+                            • ${formatTime(journal.createdAt)}
+                            ${journal.submissionCount ? `• Pengiriman ke-${journal.submissionCount}` : ''}
+                        </small>
+                    </div>
+                `;
+                journalsList.appendChild(journalCard);
+            });
+        }
+
+        // FUNCTION BARU: UPDATE STATS
+        function updateStats(totalJournals, activeStudents, todayEntries) {
+            document.getElementById('totalJournals').textContent = totalJournals;
+            document.getElementById('activeStudents').textContent = activeStudents;
+            document.getElementById('todayEntries').textContent = todayEntries;
+        }
+
+        // PERBAIKAN: UPDATE STUDENT FILTER DROPDOWN
+        function updateStudentFilter() {
             const studentFilter = document.getElementById('studentFilter');
             const currentValue = studentFilter.value;
             
             studentFilter.innerHTML = '<option value="all">Semua Siswa</option>';
             
+            // PERBAIKAN: Pastikan tidak ada duplikat
+            const uniqueStudentsMap = new Map();
+            
             allStudents.forEach(student => {
-                studentFilter.innerHTML += `<option value="${student}">${student.split('@')[0]}</option>`;
+                if (student.id && student.name) {
+                    uniqueStudentsMap.set(student.id, student);
+                }
             });
             
-            // Restore previous selection
-            studentFilter.value = currentValue;
+            // Convert Map to Array
+            const uniqueStudentsArray = Array.from(uniqueStudentsMap.values());
+            
+            // Sort by name
+            uniqueStudentsArray.sort((a, b) => a.name.localeCompare(b.name));
+            
+            // Add to dropdown
+            uniqueStudentsArray.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.name} (${student.email})`;
+                studentFilter.appendChild(option);
+            });
+            
+            // Maintain selection
+            if (currentValue && studentFilter.querySelector(`option[value="${currentValue}"]`)) {
+                studentFilter.value = currentValue;
+            } else {
+                studentFilter.value = 'all';
+            }
+            
+            console.log('📋 Student filter updated:', {
+                totalStudents: uniqueStudentsArray.length,
+                students: uniqueStudentsArray
+            });
         }
 
-        // Filter functions
+        // PERBAIKAN: FILTER BY STUDENT - WITH DEBUG
         window.filterByStudent = function() {
             selectedStudent = document.getElementById('studentFilter').value;
-            updateAdminUI();
-        }
-
-        window.filterByDate = function() {
-            selectedDate = document.getElementById('dateFilter').value;
-            updateAdminUI();
-        }
-
-        window.filterByActivity = function() {
-            selectedActivity = document.getElementById('activityFilter').value;
-            updateAdminUI();
-        }
-
-        window.applyAllFilters = function() {
-            selectedStudent = document.getElementById('studentFilter').value;
-            selectedDate = document.getElementById('dateFilter').value;
-            selectedActivity = document.getElementById('activityFilter').value;
-            updateAdminUI();
-        }
-
-        window.clearAllFilters = function() {
-            document.getElementById('studentFilter').value = 'all';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('activityFilter').value = 'all';
-            selectedStudent = 'all';
-            selectedDate = '';
-            selectedActivity = 'all';
-            updateAdminUI();
-        }
-
-        // Edit journal function
-        window.editJournal = async function(journalId) {
-            try {
-                const journalDoc = await getDoc(doc(db, 'journals', journalId));
-                if (!journalDoc.exists()) {
-                    alert('Jurnal tidak ditemukan');
-                    return;
-                }
-
-                const journal = journalDoc.data();
-                const modalContent = document.getElementById('editModalContent');
-                
-                modalContent.innerHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Nama Siswa</label>
-                        <input type="text" class="form-control" value="${journal.studentName}" readonly>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Tanggal</label>
-                        <input type="date" id="editDate" class="form-control" value="${journal.date}">
-                    </div>
-                    
-                    <h4 style="margin: 20px 0 10px 0;">Aktivitas</h4>
-                    <div class="activities-grid">
-                        ${activities.map(activity => `
-                            <div class="activity-item ${journal.activities && journal.activities[activity.id] ? 'selected' : ''}" 
-                                 onclick="toggleEditActivity('${activity.id}')">
-                                <div class="activity-content">
-                                    <div class="activity-icon">
-                                        <i class="${activity.icon}"></i>
-                                    </div>
-                                    <div class="activity-text">
-                                        <h4>${activity.title}</h4>
-                                        <p>${activity.description}</p>
-                                    </div>
-                                </div>
-                                <input type="checkbox" class="activity-checkbox" id="edit-${activity.id}" 
-                                       ${journal.activities && journal.activities[activity.id] ? 'checked' : ''}>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Doa untuk Hari Esok</label>
-                        <textarea id="editDoa" class="form-control" rows="3">${journal.doa || ''}</textarea>
-                    </div>
-                    
-                    <div class="edit-actions">
-                        <button onclick="saveJournalChanges('${journalId}')" class="btn btn-success">
-                            <i class="fas fa-save"></i> Simpan Perubahan
-                        </button>
-                        <button onclick="deleteJournal('${journalId}')" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Hapus Jurnal
-                        </button>
-                    </div>
-                `;
-                
-                document.getElementById('editModal').classList.remove('hidden');
-                
-            } catch (error) {
-                console.error('Error loading journal for edit:', error);
-                alert('Error: ' + error.message);
-            }
-        }
-
-        // Toggle activity in edit modal
-        window.toggleEditActivity = function(activityId) {
-            const checkbox = document.getElementById(`edit-${activityId}`);
-            const activityItem = checkbox.closest('.activity-item');
             
-            checkbox.checked = !checkbox.checked;
-            activityItem.classList.toggle('selected', checkbox.checked);
-        }
-
-        // Save journal changes
-        window.saveJournalChanges = async function(journalId) {
-            try {
-                const activityData = {};
-                activities.forEach(activity => {
-                    activityData[activity.id] = document.getElementById(`edit-${activity.id}`).checked;
-                });
-
-                const doaText = document.getElementById('editDoa').value.trim();
-                const date = document.getElementById('editDate').value;
-
-                await updateDoc(doc(db, 'journals', journalId), {
-                    activities: activityData,
-                    doa: doaText,
-                    date: date
-                });
-
-                showNotification('✅ Perubahan berhasil disimpan!');
-                closeEditModal();
+            console.log('🎯 Filter activated:', {
+                selectedStudent: selectedStudent,
+                availableStudents: Array.from(allStudents)
+            });
+            
+            // Trigger re-render
+            if (unsubscribeJournals) {
+                showNotification(`Filter: ${selectedStudent === 'all' ? 'Semua Siswa' : 'Siswa Terpilih'}`);
                 
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
+                // FORCE REFRESH DATA
+                loadAdminData();
             }
         }
 
-        // Delete journal
-        window.deleteJournal = async function(journalId) {
-            if (confirm('Apakah Anda yakin ingin menghapus jurnal ini?')) {
-                try {
-                    await deleteDoc(doc(db, 'journals', journalId));
-                    showNotification('✅ Jurnal berhasil dihapus!');
-                    closeEditModal();
-                } catch (error) {
-                    alert('❌ Error: ' + error.message);
-                }
-            }
+        // CLEAR FILTER
+        window.clearFilter = function() {
+            document.getElementById('studentFilter').value = 'all';
+            selectedStudent = 'all';
+            // ✅ SEMBUNYIKAN NILAI SAAT CLEAR FILTER
+            document.getElementById('nilaiStatCard').style.display = 'none';
+            showNotification('Filter direset ke semua siswa');
+            loadAdminData();
         }
 
-        // Close edit modal
-        window.closeEditModal = function() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
-
-        // Load student history
-        async function loadStudentHistory() {
+        // Real-time Student History
+        function loadStudentHistory() {
+            if (!currentUser) return;
+            
             try {
                 if (unsubscribeStudentJournals) {
                     unsubscribeStudentJournals();
                 }
 
-                const q = query(
+                const studentJournalsQuery = query(
                     collection(db, 'journals'),
                     where('studentId', '==', currentUser.uid),
                     orderBy('createdAt', 'desc')
                 );
                 
-                unsubscribeStudentJournals = onSnapshot(q, (querySnapshot) => {
-                    const historyContainer = document.getElementById('studentHistory');
-                    const journals = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    
-                    if (journals.length === 0) {
-                        historyContainer.innerHTML = `
-                            <div style="text-align: center; color: var(--gray); padding: 20px;">
-                                <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                                <p>Belum ada riwayat jurnal</p>
-                            </div>
-                        `;
-                        return;
-                    }
-                    
-                    historyContainer.innerHTML = `
-                        <h3 style="margin-bottom: 20px; color: var(--dark);">
-                            <i class="fas fa-history"></i> Riwayat Jurnal Saya
-                        </h3>
-                        <div class="journal-list">
-                            ${journals.map(journal => {
-                                const completedActivities = journal.activities ? 
-                                    Object.keys(journal.activities).filter(key => journal.activities[key]).length : 0;
-                                const totalActivities = activities.length;
-                                
-                                return `
-                                    <div class="journal-card">
-                                        <div class="journal-header">
-                                            <div class="student-name">${formatDate(journal.date)}</div>
-                                            <div class="journal-date">${completedActivities}/${totalActivities} Aktifitas</div>
-                                        </div>
-                                        <div class="activities-summary">
-                                            ${journal.doa ? `
-                                                <div class="activity-badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary);">
-                                                    <i class="fas fa-praying-hands"></i> ${journal.doa}
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    `;
+                unsubscribeStudentJournals = onSnapshot(studentJournalsQuery, (querySnapshot) => {
+                    console.log('📝 Student history updated!', querySnapshot.size, 'entries');
+                    updateStudentHistoryUI(querySnapshot);
                 });
+                
             } catch (error) {
-                console.error('Error loading student history:', error);
+                console.error('Error setting up student real-time listener:', error);
             }
         }
 
-        // Format date
+        // Update Student History UI dengan doa
+        function updateStudentHistoryUI(querySnapshot) {
+            const historyContainer = document.getElementById('studentHistory');
+            
+            if (querySnapshot.empty) {
+                historyContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--gray);">
+                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Belum ada riwayat jurnal</p>
+                        <small>Jurnal yang Anda simpan akan muncul di sini</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            const journals = querySnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+            }));
+            
+            historyContainer.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: var(--dark);">
+                    <i class="fas fa-history"></i> Riwayat Jurnal Anda
+                </h3>
+                <div class="student-journals-list">
+                    ${journals.map(journal => {
+                        const completedActivities = Object.values(journal.activities).filter(Boolean).length;
+                        const totalActivities = Object.keys(journal.activities).length;
+                        const completionRate = Math.round((completedActivities / totalActivities) * 100);
+                        
+                        return `
+                            <div class="journal-card" style="margin-bottom: 15px;">
+                                <div class="journal-header">
+                                    <div class="journal-date">
+                                        <i class="far fa-calendar"></i> ${formatDate(journal.date)}
+                                        ${journal.date === new Date().toISOString().split('T')[0] ? 
+                                          '<span style="color: var(--success); margin-left: 8px;">• Hari Ini</span>' : ''}
+                                    </div>
+                                    <div style="color: var(--primary); font-weight: 600;">
+                                        ${completionRate}% Completed
+                                    </div>
+                                </div>
+                                <div style="margin: 10px 0;">
+                                    <div style="background: var(--border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: var(--success); height: 100%; width: ${completionRate}%;"></div>
+                                    </div>
+                                </div>
+                                <div class="activities-summary">
+                                    ${Object.entries(journal.activities).map(([key, value]) => {
+                                        const activity = activities.find(a => a.id === key);
+                                        return `
+                                            <div class="activity-badge ${value ? 'activity-completed' : 'activity-missed'}">
+                                                <i class="fas fa-${value ? 'check' : 'times'}"></i>
+                                                ${activity?.title || key}
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                                ${journal.doa ? `
+                                    <div style="margin-top: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 8px; border-left: 4px solid var(--primary);">
+                                        <strong><i class="fas fa-praying-hands"></i> Doa Hari Esok:</strong>
+                                        <p style="margin: 8px 0 0 0; color: var(--dark); font-style: italic;">"${journal.doa}"</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // Helper functions
         function formatDate(dateString) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
 
-        // Show notification
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            const date = timestamp.toDate();
+            return date.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.className = 'notification';
-            notification.innerHTML = message;
+            notification.innerHTML = `
+                <i class="fas fa-sync-alt"></i> ${message}
+            `;
+            
             document.body.appendChild(notification);
             
             setTimeout(() => {
@@ -1377,32 +1369,42 @@
             }, 3000);
         }
 
-        // Logout function
-        window.logout = async function() {
+        // FUNCTION DELETE JURNAL
+        window.deleteJournal = async function(journalId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus jurnal ini? Tindakan ini tidak dapat dibatalkan!')) {
+                return;
+            }
+
             try {
-                if (unsubscribeJournals) {
-                    unsubscribeJournals();
-                }
-                if (unsubscribeStudentJournals) {
-                    unsubscribeStudentJournals();
-                }
+                // Hapus dari Firestore
+                await deleteDoc(doc(db, 'journals', journalId));
                 
-                await signOut(auth);
-                document.getElementById('loginSection').classList.remove('hidden');
-                document.getElementById('studentDashboard').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.add('hidden');
+                showNotification('✅ Jurnal berhasil dihapus!');
                 
-                // Reset form
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
+                // Update batasan kirim (karena jumlah jurnal berkurang)
+                updateSubmitLimitInfo();
                 
-                showNotification('Berhasil logout!');
             } catch (error) {
-                console.error('Logout error:', error);
+                console.error('Error deleting journal:', error);
+                alert('❌ Gagal menghapus jurnal: ' + error.message);
             }
         }
 
-        // Auth state observer
+        // Logout function
+        window.logout = function() {
+            if (unsubscribeJournals) {
+                unsubscribeJournals();
+                unsubscribeJournals = null;
+            }
+            if (unsubscribeStudentJournals) {
+                unsubscribeStudentJournals();
+                unsubscribeStudentJournals = null;
+            }
+            
+            signOut(auth);
+        }
+
+        // Auth state listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -1411,11 +1413,17 @@
                 document.getElementById('loginSection').classList.remove('hidden');
                 document.getElementById('studentDashboard').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.add('hidden');
+                
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
             }
         });
 
         // Initialize app
         initApp();
     </script>
+
+
+    
 </body>
 </html>
