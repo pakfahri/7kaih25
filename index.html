@@ -1042,16 +1042,20 @@
                     return false;
                 }
                 
-                // Filter berdasarkan status aktivitas (completed/not-completed)
-                if (activityFilter !== 'all') {
-                    const hasCompletedActivities = Object.values(journal.activities).some(val => val);
-                    if (activityFilter === 'completed' && !hasCompletedActivities) {
-                        return false;
-                    }
-                    if (activityFilter === 'not-completed' && hasCompletedActivities) {
-                        return false;
-                    }
-                }
+               // GANTI kode filter yang salah dengan ini:
+
+// Filter berdasarkan status aktivitas (completed/not-completed)
+if (activityFilter !== 'all') {
+    const hasCompletedActivities = Object.values(journal.activities).some(val => val);
+    const hasIncompleteActivities = Object.values(journal.activities).some(val => !val);
+    
+    if (activityFilter === 'completed' && !hasCompletedActivities) {
+        return false;  // Sembunyikan jika tidak ada aktivitas yang selesai
+    }
+    if (activityFilter === 'not-completed' && !hasIncompleteActivities) {
+        return false;  // Sembunyikan jika semua aktivitas selesai
+    }
+}
                 
                 // Filter berdasarkan aktivitas spesifik
                 if (specificActivityFilter !== 'all') {
