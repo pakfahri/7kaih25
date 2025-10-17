@@ -569,22 +569,22 @@
                                 <input type="date" id="endDateFilter" class="form-control" onchange="applyFilters()">
                             </div>
                             
-                            <!-- Filter Aktivitas -->
-                            <div>
-                                <label class="form-label">Filter Aktivitas</label>
-                                <select id="activityFilter" class="form-control" onchange="applyFilters()">
-                                    <option value="all">Semua Aktivitas</option>
-                                    <option value="completed">Hanya yang Selesai</option>
-                                    <option value="not-completed">Hanya yang Belum Selesai</option>
-                                </select>
-                            </div>
-                            
                             <!-- Filter Jenis Aktivitas Spesifik -->
                             <div>
                                 <label class="form-label">Jenis Aktivitas</label>
                                 <select id="specificActivityFilter" class="form-control" onchange="applyFilters()">
                                     <option value="all">Semua Jenis</option>
                                     <!-- Activities will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <!-- FILTER DOA BARU -->
+                            <div>
+                                <label class="form-label">Filter Doa</label>
+                                <select id="doaFilter" class="form-control" onchange="applyFilters()">
+                                    <option value="all">Semua Doa</option>
+                                    <option value="with-doa">Dengan Doa</option>
+                                    <option value="without-doa">Tanpa Doa</option>
                                 </select>
                             </div>
                         </div>
@@ -660,8 +660,8 @@
         // Global variables untuk filter
         let startDateFilter = null;
         let endDateFilter = null;
-        let activityFilter = 'all';
         let specificActivityFilter = 'all';
+        let doaFilter = 'all';
 
         // ACTIVITIES YANG DIPERBARUI
         const activities = [
@@ -683,21 +683,18 @@
                 title: 'Sholat Dzuhur & Ashar',
                 description: 'Sholat dzuhur/jumat & sholat ashar'
             },
-
             {
                 id: 'sholatMaghribIsya',
                 icon: 'fas fa-star-and-crescent',
                 title: 'Sholat Maghrib & Isya',
                 description: 'Sholat maghrib & Isya berjamaah'
             },
-            
             {
                 id: 'olahraga',
                 icon: 'fas fa-running',
                 title: 'Olahraga',
                 description: 'Workout / Running / Senam'
             },
-
             {
                 id: 'belajar',
                 icon: 'fas fa-book-open',
@@ -1042,24 +1039,20 @@
                     return false;
                 }
                 
-               // GANTI kode filter yang salah dengan ini:
-
-// Filter berdasarkan status aktivitas (completed/not-completed)
-if (activityFilter !== 'all') {
-    const hasCompletedActivities = Object.values(journal.activities).some(val => val);
-    const hasIncompleteActivities = Object.values(journal.activities).some(val => !val);
-    
-    if (activityFilter === 'completed' && !hasCompletedActivities) {
-        return false;  // Sembunyikan jika tidak ada aktivitas yang selesai
-    }
-    if (activityFilter === 'not-completed' && !hasIncompleteActivities) {
-        return false;  // Sembunyikan jika semua aktivitas selesai
-    }
-}
-                
                 // Filter berdasarkan aktivitas spesifik
                 if (specificActivityFilter !== 'all') {
                     if (!journal.activities[specificActivityFilter]) {
+                        return false;
+                    }
+                }
+                
+                // Filter berdasarkan doa - BARU
+                if (doaFilter !== 'all') {
+                    const hasDoa = journal.doa && journal.doa.trim() !== '';
+                    if (doaFilter === 'with-doa' && !hasDoa) {
+                        return false;
+                    }
+                    if (doaFilter === 'without-doa' && hasDoa) {
                         return false;
                     }
                 }
@@ -1366,8 +1359,8 @@ if (activityFilter !== 'all') {
             // Ambil nilai dari input filter
             startDateFilter = document.getElementById('startDateFilter').value;
             endDateFilter = document.getElementById('endDateFilter').value;
-            activityFilter = document.getElementById('activityFilter').value;
             specificActivityFilter = document.getElementById('specificActivityFilter').value;
+            doaFilter = document.getElementById('doaFilter').value;
             
             // Validasi tanggal
             if (startDateFilter && endDateFilter && startDateFilter > endDateFilter) {
@@ -1393,15 +1386,15 @@ if (activityFilter !== 'all') {
             // Reset semua filter
             document.getElementById('startDateFilter').value = '';
             document.getElementById('endDateFilter').value = '';
-            document.getElementById('activityFilter').value = 'all';
             document.getElementById('specificActivityFilter').value = 'all';
+            document.getElementById('doaFilter').value = 'all';
             document.getElementById('studentFilter').value = 'all';
             
             // Reset variabel global
             startDateFilter = null;
             endDateFilter = null;
-            activityFilter = 'all';
             specificActivityFilter = 'all';
+            doaFilter = 'all';
             selectedStudent = 'all';
             
             // Update status
@@ -1426,14 +1419,15 @@ if (activityFilter !== 'all') {
                 statusElements.push(`Tanggal: ${start} - ${end}`);
             }
             
-            if (activityFilter !== 'all') {
-                const activityText = activityFilter === 'completed' ? 'Selesai' : 'Belum Selesai';
-                statusElements.push(`Status: ${activityText}`);
-            }
-            
             if (specificActivityFilter !== 'all') {
                 const activity = activities.find(a => a.id === specificActivityFilter);
                 statusElements.push(`Aktivitas: ${activity?.title || specificActivityFilter}`);
+            }
+            
+            // BARU: Status filter doa
+            if (doaFilter !== 'all') {
+                const doaText = doaFilter === 'with-doa' ? 'Dengan Doa' : 'Tanpa Doa';
+                statusElements.push(`Doa: ${doaText}`);
             }
             
             const statusText = statusElements.length > 0 
