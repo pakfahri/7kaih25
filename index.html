@@ -1025,7 +1025,7 @@
             const limitInfo = document.getElementById('submitLimitInfo');
             const limitMessage = document.getElementById('limitMessage');
             
-            if (todayJournals > 0) {
+            if (todayJournals > 2) {
                 limitInfo.style.display = 'block';
                 const remaining = 1 - todayJournals;
                 
@@ -1033,7 +1033,7 @@
                     limitMessage.innerHTML = `Kamu belum mengirim <strong> jurnal</strong> hari ini. Kamu bisa kirim <strong>1 jurnal</strong>.`;
                     limitInfo.style.background = 'rgba(6, 214, 160, 0.1)';
                     limitInfo.style.borderColor = 'var(--success)';
-                } else if (todayJournals >= 1) {
+                } else if (todayJournals >= 2) {
                     limitMessage.innerHTML = `❌ Kamu sudah mencapai batas maksimal <strong>1 jurnal</strong> per hari. Silakan lanjut besok!`;
                     limitInfo.style.background = 'rgba(239, 71, 111, 0.1)';
                     limitInfo.style.borderColor = 'var(--danger)';
